@@ -33,18 +33,15 @@ object Main {
    */
 
   def balance(chars: List[Char]): Boolean = {
-    var balancing = 0;
     def iterate(chars: List[Char], counter: Int): Int = {
-      if (chars.isEmpty || balancing <0 )balancing else{
-        if (chars.head == '(') {
-          balancing = balancing + 1
-        } else if (chars.head == ')') {
-          balancing = balancing - 1
-        }
-      iterate(chars.tail, balancing)
+      if (chars.isEmpty || counter <0 )counter 
+      else{
+        if (chars.head == '(') iterate(chars.tail,counter+1)
+        else if (chars.head == ')') iterate(chars.tail,counter-1)
+        else(iterate(chars.tail, counter))
       }
     }
-    iterate(chars, balancing) == 0
+    iterate(chars, 0) == 0
   }
 
   /*
@@ -71,5 +68,13 @@ object Main {
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = ???
+   def countChange(money: Int, coins: List[Int]): Int = {
+    coins.sortWith(_ < _) match {
+      case head :: tail =>
+        if (head > money) 0
+        else if (money == head) 1
+        else countChange(money - head, coins) + countChange(money, tail)
+      case _ => 0
+    }
+  }
 }
